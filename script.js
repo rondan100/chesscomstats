@@ -34,71 +34,95 @@ function processGames(games, user) {
 
   let wins = 0, losses = 0, draws = 0;
   const ecoCount = {};
+  const dates = [];
+  const dateCounts = {};
   const ratingLabels = [];
   const ratingValues = [];
 
+  // Primeiro, calcule quantas partidas por data
+  games.forEach(game => {
+    const dateStr = new Date(game.end_time * 1000)
+      .toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+    dates.push(dateStr);
+    dateCounts[dateStr] = (dateCounts[dateStr] || 0) + 1;
+  });
+
+  // Agora processe cada partida
   games.forEach((game, i) => {
     const isWhite = game.white.username.toLowerCase() === user;
     const isBlack = game.black.username.toLowerCase() === user;
     if (!isWhite && !isBlack) return;
 
-    // Resultado
+    // Conte resultados
     const result = isWhite ? game.white.result : game.black.result;
     if (result === 'win') wins++;
     else if (['stalemate','agreed','repetition','timevsinsufficient'].includes(result)) draws++;
     else losses++;
 
-    // Abertura
+    // Conte ECOs
     const ecoRaw = game.eco || 'Desconhecido';
-    const name = ecoRaw.split('/openings/').pop();
-    ecoCount[name] = (ecoCount[name] || 0) + 1;
+    const ecoName = ecoRaw.split('/openings/').pop();
+    ecoCount[ecoName] = (ecoCount[ecoName] || 0) + 1;
 
-    // Rating do usuário nessa partida
+    // Prepare rating e labels
     const rating = isWhite ? game.white.rating : game.black.rating;
-    const date = new Date(game.end_time * 1000)
-      .toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-    ratingLabels.push(`${date} (#${i+1})`);
+    const dateStr = dates[i];        // já formatado
     ratingValues.push(rating);
+    ratingLabels.push(`${dateStr} (#${i+1})`);
   });
 
+  // Exibe texto e gráficos
   renderResultText(wins, losses, draws, ecoCount);
   renderEcoChart(ecoCount);
-  renderRatingChart(ratingLabels, ratingValues);
+  renderRatingChart(ratingLabels, ratingValues, dateCounts);
 }
 
 function renderResultText(w, l, d, ecoCount) {
   const total = w + l + d;
-  let html = `<p>Vitórias: ${w}</p><p>Derrotas: ${l}</p><p>Empates: ${d}</p>`;
-  html += '<h3>Top 5 Aberturas</h3><ul>';
+  let html = `
+    <p>Total de partidas no mês: ${total}</p>
+    <p>Vitórias: ${w}</p>
+    <p>Derrotas: ${l}</p>
+    <p>Empates: ${d}</p>
+    <h3>Top 5 Aberturas</h3>
+    <ul>
+  `;
   Object.entries(ecoCount)
-    .sort((a,b)=> b[1]-a[1])
-    .slice(0,5)
-    .forEach(([eco,c]) => {
-      const pct = ((c/total)*100).toFixed(2);
-      html += `<li>${eco}: ${c} partidas (${pct}%)</li>`;
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .forEach(([eco, count]) => {
+      const pct = ((count / total) * 100).toFixed(2);
+      html += `<li>${eco}: ${count} partidas (${pct}%)</li>`;
     });
   html += '</ul>';
   document.getElementById('result').innerHTML = html;
 }
 
 function renderEcoChart(ecoCount) {
-  const entries = Object.entries(ecoCount).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  const labels = entries.map(e=>e[0]);
-  const data = entries.map(e=>e[1]);
-  if (ecoChart) ecoChart.destroy();
+  const entries = Object.entries(ecoCount)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
+  const labels = entries.map(e => e[0]);
+  const data = entries.map(e => e[1]);
 
+  if (ecoChart) ecoChart.destroy();
   const ctx = document.getElementById('ecoChart').getContext('2d');
   ecoChart = new Chart(ctx, {
     type: 'bar',
     data: { labels, datasets: [{ data, backgroundColor: '#3498db' }] },
-    options: { indexAxis: 'y', responsive: true, plugins:{ legend:{display:false} } }
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { x: { beginAtZero: true } }
+    }
   });
 }
 
-function renderRatingChart(labels, values) {
+function renderRatingChart(labels, values, dateCounts) {
   if (ratingChart) ratingChart.destroy();
-
   const ctx = document.getElementById('ratingChart').getContext('2d');
+
   ratingChart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -113,10 +137,36 @@ function renderRatingChart(labels, values) {
       }]
     },
     options: {
+      responsive: true,
       scales: {
-        y: { beginAtZero: false }
+        x: {
+          ticks: {
+            callback: function(value) {
+              const fullLabel = this.getLabelForValue(value);
+              const dateOnly = fullLabel.split(' ')[0];
+              const count = dateCounts[dateOnly] || 0;
+              return `${dateOnly} (${count})`;
+            }
+          },
+          title: {
+            display: true,
+            text: 'Data (qtde de jogos no dia)'
+          }
+        },
+        y: {
+          beginAtZero: false,
+          title: { display: true, text: 'Rating' }
+        }
       },
-      responsive: true
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: ctxArr => ctxArr[0].label,
+            label: ctx => `Rating: ${ctx.parsed.y}`
+          }
+        }
+      }
     }
   });
 }
