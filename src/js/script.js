@@ -138,6 +138,7 @@ function renderRatingChart(labels, values, dateCounts) {
     },
     options: {
       responsive: true,
+      offset: true,
       scales: {
         x: {
           ticks: {

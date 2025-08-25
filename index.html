@@ -3,25 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Resultados e Rating - Chess.com</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Dashboard de Jogos – Chess.com</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Seus estilos (permanece igual ao que você já tem) -->
+  <link rel="stylesheet" href="./src/css/styles.css" />
 </head>
+
 <body>
+
   <h2>Estatísticas Mensais no Chess.com</h2>
 
-  <form onsubmit="event.preventDefault(); fetchResults();">
+  <!-- CONTROLES DE ENTRADA -->
+  <form id="filterForm">
     <input type="text" id="username" placeholder="Nome do usuário" required/>
     <input type="number" id="year" placeholder="Ano (ex: 2025)" min="2000" required/>
-    <input type="number" id="month" placeholder="Mês (1–12)" min="1" max="12" required/>
-    <button type="submit">Buscar</button>
+    <input type="number" id="month" placeholder="Mês" min="1" max="12" required/>
+    <button type="submit" id="btnFetch">Buscar</button>
   </form>
 
+  <!-- RESULTADOS TEXTUAIS -->
   <div id="result"></div>
 
-  <canvas id="ecoChart"></canvas>
-  <canvas id="ratingChart"></canvas>
+  <!-- GRÁFICOS -->
+    <canvas id="ecoChart"></canvas>
+    <canvas id="ratingChart"></canvas>
 
-  <script src="script.js"></script>
+  <!-- ENTRYPOINT DO JS (ES Modules) -->
+  <script type="module" src="./src/js/main.js"></script>
 </body>
 </html>
