@@ -6,6 +6,9 @@ export function renderRatingChart(ratingsInfo, dateCounts) {
   const { labels, values } = ratingsInfo;
   if (ratingChart) ratingChart.destroy();
 
+  // Variável de controle para não repetir data
+  let lastDayTick = null;
+
   const ctx = document.getElementById('ratingChart').getContext('2d');
   ratingChart = new Chart(ctx, {
     type: 'line',
@@ -24,10 +27,29 @@ export function renderRatingChart(ratingsInfo, dateCounts) {
       responsive:true,
       scales: {
         x: {
+          time: {
+            unit: 'day',
+            // força marcações diárias
+            stepSize: 1,
+            displayFormats: { day: 'DD/MM' }
+          },
           ticks: {
+            autoSkip: false, 
+            // define quantos ticks no máximo (ajuste conforme a largura do gráfico)
+            maxTicksLimit: 31,
+            // gira os labels para melhorar a leitura
+            maxRotation: 60,
+
             callback: function(value) {
               const fullLabel = this.getLabelForValue(value);
               const dateOnly  = fullLabel.split(' ')[0];
+
+              // Se for igual ao anterior, retorna string vazia (sem label)
+              if (dateOnly === lastDayTick) {
+                return '';
+              }
+              lastDayTick = dateOnly;
+
               const cnt       = dateCounts[dateOnly] || 0;
               return `${dateOnly} (${cnt})`;
             }

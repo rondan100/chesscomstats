@@ -2,6 +2,9 @@
 
 # Versões
 
+## 1.1.1
+- Atualização do grafico para não repetir datas e mostrar todos os dias com dados
+
 ## 1.1.0
 - Padronização do projeto
 

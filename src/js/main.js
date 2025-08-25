@@ -14,9 +14,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const year  = document.getElementById('year').value;
     const month = document.getElementById('month').value;
 
-    if (!user || !year || !month) {
-      alert('Preencha todos os campos');
-      return;
+    // 1) Username continua obrigatório
+    if (!username) {
+        return res.status(400).json({ error: 'O campo username é obrigatório.' });
+    }
+    
+    // 2) Se um dos filtros de data vier sem o outro, aí sim dá erro
+    if ((year && !month) || (!year && month)) {
+        return res
+        .status(400)
+        .json({ error: 'Informe ambos ano e mês para filtrar ou nenhum dos dois.' });
     }
 
     try {
