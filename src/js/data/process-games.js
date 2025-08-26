@@ -21,7 +21,7 @@ export function processGames(games, user) {
   
       // resultado
       const result = white ? game.white.result : game.black.result;
-      if (result === 'win') {wins++; console.log("Derrota:", result, game.url, game.time_class);}
+      if (result === 'win') {wins++;}
       else if ([
         "stalemate",
         "agreed",
@@ -36,8 +36,7 @@ export function processGames(games, user) {
         "timeout",
         "lose",
         "abandoned"
-      ].includes(result)) {losses++;
-      console.log("Derrota:", result, game.url, game.time_class);}
+      ].includes(result)) {losses++;}
       else console.log("⚠️ Resultado não mapeado:", result);
   
       // ECO

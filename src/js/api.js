@@ -33,7 +33,7 @@ export async function fetchGamesByRange(username, days, tipo) {
           if (!res.ok) throw new Error('Falha ao baixar mês de jogos.');
           return res.json();
         })
-        .then(json => (json.games || []).filter(game => game.time_class === tipo) // 🔥 filtro por tipo
+        .then(json => (json.games || []).filter(game => game.time_class === tipo && game.rules === "chess") // 🔥 filtro por tipo e rules chess
       )
     )
   );

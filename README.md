@@ -2,6 +2,12 @@
 
 # Versões
 
+# 1.1.4
+- Grafico no início
+- Ajuste nos ticks do gráfico de rating
+- Ajuste de filtro para pegar apenas rules="chess"
+- Mapeamento de vitórias, empates e derrotas
+
 # 1.1.3
 - Atualização para separar partidas por blitz, rapidas e bullet
 

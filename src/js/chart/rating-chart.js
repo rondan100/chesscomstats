@@ -1,6 +1,8 @@
 // src/js/chart/rating-chart.js
 
 let ratingChart = null;
+// fora do callback (no mesmo escopo do renderRatingChart), reseta a cada render:
+let shownDays = new Set();
 
 export function renderRatingChart(ratingsInfo, dateCounts) {
   const { labels, values } = ratingsInfo;
@@ -35,40 +37,54 @@ export function renderRatingChart(ratingsInfo, dateCounts) {
             minUnit: 'day'            // força usar dia como menor unidade
           },
           ticks: {
-            autoSkip: false, 
+            autoSkip: false,
             callback(value, index, ticks) {
-              const total   = ticks.length;
-              const chart  = this.chart;
-              const width  = chart.width; 
-
-              // define quantos px cada label precisa
-              const minPx  = 35;
-              // calcula quantos labels cabem
-              const maxTicks = Math.floor(width / minPx) || 1;
-              // passo para percorrer todos os labels
-              const step   = Math.ceil(total / maxTicks);
-
-              // prepara label formatado
+              const total = ticks.length;
+              const chart = this.chart;
+              const width = chart.width;
+          
+              // pega label e dia
               const fullLabel = this.getLabelForValue(value);
-              const dateOnly  = fullLabel.split(' ')[0];
+              const dateOnly  = String(fullLabel).split(' ')[0];
               const cnt       = dateCounts[dateOnly] || 0;
               const label     = `${dateOnly} (${cnt})`;
-
-              // Se for igual ao anterior, retorna string vazia (sem label)
-              if (dateOnly === lastDayTick) {
-                return '';
+          
+              // calcula espaçamento dinâmico
+              const charWidth = 2; // px médio por caractere
+              const minPx     = Math.max(40, Math.min(120, label.length * charWidth));
+              const maxTicks  = Math.floor(width / minPx) || 1;
+              const step      = Math.ceil(total / maxTicks);
+          
+              // --- regras ---
+              // 1) sempre mostrar o primeiro tick
+              if (index === 0) {
+                shownDays.add(dateOnly);
+                return label;
+              }
+          
+              // 2) sempre mostrar o último tick
+              if (index === total - 1) {
+                shownDays.add(dateOnly);
+                return label;
               }
 
-              // exibe sempre o último dia
-              if (index === total - 1) return label;
-              // exibe só a cada "step"
+              // 3) sempre mostrar o medio tick
+              if (index === (total+1)/2) {
+                shownDays.add(dateOnly);
+                return label;
+              }
+          
+              // 4) evitar dias repetidos
+              if (shownDays.has(dateOnly)) return '';
+          
+              // 5) mostrar apenas de acordo com o step
               if (index % step !== 0) return '';
+          
+              shownDays.add(dateOnly);
               return label;
-
-             // return `${dateOnly} (${cnt})`;
             }
           },
-          title: { display:true, text:'Data (qtde de jogos no dia)' }
+      title: { display:true, text:'Data (qtde de jogos no dia)' }
         },
         y: {
           beginAtZero:false,
