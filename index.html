@@ -20,11 +20,18 @@
     <!-- <input type="number" id="year" placeholder="Ano (ex: 2025)" min="2000"/>
     <input type="number" id="month" placeholder="Mês" min="1" max="12"/> -->
 
-    <label for="rangeSelect">Período:</label>
+<!--     <label for="rangeSelect">Período:</label>
+ -->    
     <select id="rangeSelect" name="range" required>
       <option value="7">Últimos 7 dias</option>
       <option value="30" selected>Últimos 30 dias</option>
       <option value="90">Últimos 90 dias</option>
+    </select>
+
+    <select id="tipoSelect" name="tipo" required>
+      <option value="Bullet">Bullet</option>
+      <option value="Blitz" selected>Blitz</option>
+      <option value="Rapid">Rapidas</option>
     </select>
 
     <button type="submit" id="btnFetch">Buscar</button>

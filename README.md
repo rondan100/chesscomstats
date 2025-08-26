@@ -2,6 +2,9 @@
 
 # Versões
 
+# 1.1.3
+- Atualização para separar partidas por blitz, rapidas e bullet
+
 ## 1.1.2
 - Atualização do gráfico de rating para evitar desajuste no eixo x
 - Mudança no Range Select para 7, 30 e 90 dias

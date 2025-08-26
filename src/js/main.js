@@ -12,12 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const user  = document.getElementById('username').value.trim().toLowerCase();
     const days  = Number(document.getElementById('rangeSelect').value);
+    const tipo  = document.getElementById('tipoSelect').value.trim().toLowerCase();
 
     if (!user) return alert('Informe ao menos o nome do usuário.');
 
     try {
       // busca partidas só dos últimos X dias
-      const games = await fetchGamesByRange(user, days);
+      const games = await fetchGamesByRange(user, days, tipo);
 
       if (games.length === 0) {
         document.getElementById('result').innerText = 'Nenhuma partida encontrada.';

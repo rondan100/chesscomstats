@@ -21,9 +21,24 @@ export function processGames(games, user) {
   
       // resultado
       const result = white ? game.white.result : game.black.result;
-      if (result === 'win') wins++;
-      else if (['stalemate','agreed','repetition','timevsinsufficient'].includes(result)) draws++;
-      else losses++;
+      if (result === 'win') {wins++; console.log("Derrota:", result, game.url, game.time_class);}
+      else if ([
+        "stalemate",
+        "agreed",
+        "repetition",
+        "timevsinsufficient",
+        "insufficient",
+        "50move"
+      ].includes(result)) draws++;
+      else if ([
+        "checkmated",
+        "resigned",
+        "timeout",
+        "lose",
+        "abandoned"
+      ].includes(result)) {losses++;
+      console.log("Derrota:", result, game.url, game.time_class);}
+      else console.log("⚠️ Resultado não mapeado:", result);
   
       // ECO
       const ecoRaw  = game.eco || 'Desconhecido';

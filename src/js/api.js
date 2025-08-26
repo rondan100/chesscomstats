@@ -1,5 +1,5 @@
 // src/js/api.js
-export async function fetchGamesByRange(username, days) {
+export async function fetchGamesByRange(username, days, tipo) {
   // 1) Puxar os URLs de todos os meses
   const archivesRes = await fetch(
     `https://api.chess.com/pub/player/${username}/games/archives`
@@ -33,7 +33,8 @@ export async function fetchGamesByRange(username, days) {
           if (!res.ok) throw new Error('Falha ao baixar mês de jogos.');
           return res.json();
         })
-        .then(json => json.games || [])
+        .then(json => (json.games || []).filter(game => game.time_class === tipo) // 🔥 filtro por tipo
+      )
     )
   );
   const allGames = batches.flat();
