@@ -8,7 +8,6 @@ export function renderRatingChart(ratingsInfo, dateCounts) {
 
   // Variável de controle para não repetir data
   let lastDayTick = null;
-
   const ctx = document.getElementById('ratingChart').getContext('2d');
   ratingChart = new Chart(ctx, {
     type: 'line',
@@ -27,31 +26,46 @@ export function renderRatingChart(ratingsInfo, dateCounts) {
       responsive:true,
       scales: {
         x: {
+          distribution: 'series',
           time: {
             unit: 'day',
             // força marcações diárias
             stepSize: 1,
-            displayFormats: { day: 'DD/MM' }
+            displayFormats: { day: 'DD/MM' },
+            minUnit: 'day'            // força usar dia como menor unidade
           },
           ticks: {
             autoSkip: false, 
-            // define quantos ticks no máximo (ajuste conforme a largura do gráfico)
-            maxTicksLimit: 31,
-            // gira os labels para melhorar a leitura
-            maxRotation: 60,
+            callback(value, index, ticks) {
+              const total   = ticks.length;
+              const chart  = this.chart;
+              const width  = chart.width; 
 
-            callback: function(value) {
+              // define quantos px cada label precisa
+              const minPx  = 35;
+              // calcula quantos labels cabem
+              const maxTicks = Math.floor(width / minPx) || 1;
+              // passo para percorrer todos os labels
+              const step   = Math.ceil(total / maxTicks);
+
+              // prepara label formatado
               const fullLabel = this.getLabelForValue(value);
               const dateOnly  = fullLabel.split(' ')[0];
+              const cnt       = dateCounts[dateOnly] || 0;
+              const label     = `${dateOnly} (${cnt})`;
 
               // Se for igual ao anterior, retorna string vazia (sem label)
               if (dateOnly === lastDayTick) {
                 return '';
               }
-              lastDayTick = dateOnly;
 
-              const cnt       = dateCounts[dateOnly] || 0;
-              return `${dateOnly} (${cnt})`;
+              // exibe sempre o último dia
+              if (index === total - 1) return label;
+              // exibe só a cada "step"
+              if (index % step !== 0) return '';
+              return label;
+
+             // return `${dateOnly} (${cnt})`;
             }
           },
           title: { display:true, text:'Data (qtde de jogos no dia)' }

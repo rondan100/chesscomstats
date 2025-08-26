@@ -2,6 +2,10 @@
 
 # Versões
 
+## 1.1.2
+- Atualização do gráfico de rating para evitar desajuste no eixo x
+- Mudança no Range Select para 7, 30 e 90 dias
+
 ## 1.1.1
 - Atualização do grafico para não repetir datas e mostrar todos os dias com dados
 

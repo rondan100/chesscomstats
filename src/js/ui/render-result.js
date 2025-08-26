@@ -2,7 +2,7 @@
 export function renderResultText({ wins, losses, draws, ecoCount }) {
     const total = wins + losses + draws;
     let html = `
-      <p>Total de partidas no mês: ${total}</p>
+      <p>Total de partidas: ${total}</p>
       <p>Vitórias: ${wins}</p>
       <p>Derrotas: ${losses}</p>
       <p>Empates: ${draws}</p>
