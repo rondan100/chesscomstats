@@ -1,7 +1,7 @@
 // src/js/main.js
 import { fetchGamesByRange } from './api.js';
 import { processGames }      from './data/process-games.js';
-import { renderResultText }  from './ui/render-result.js';
+import { renderResultBar }  from './ui/render-result.js';
 import { renderEcoChart }    from './chart/eco-chart.js';
 import { renderRatingChart } from './chart/rating-chart.js';
 
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const stats = processGames(games, user);
 
       // rende resultados e gráficos
-      renderResultText(stats);
+      renderResultBar(stats);
       renderEcoChart(stats.ecoCount);
       renderRatingChart(stats.ratingsInfo, stats.dateCounts);
 

@@ -2,16 +2,19 @@
 
 # Versões
 
-# 1.1.5
+## 1.1.6
+- Ajuste para gráfico de barras com porcentagem e ficar no início
+
+## 1.1.5
 - Ajuste nas datas para corrigir os numeros de vitórias, empates e derrotas
 
-# 1.1.4
+## 1.1.4
 - Grafico no início
 - Ajuste nos ticks do gráfico de rating
 - Ajuste de filtro para pegar apenas rules="chess"
 - Mapeamento de vitórias, empates e derrotas
 
-# 1.1.3
+## 1.1.3
 - Atualização para separar partidas por blitz, rapidas e bullet
 
 ## 1.1.2
