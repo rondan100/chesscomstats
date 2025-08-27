@@ -1,6 +1,9 @@
 # chesscomstats
-
+![resultado](versao1.1.7.png)
 # Versões
+
+## 1.1.7 
+- Adição de Rating atual mostrando a diferença entre o último do range de dias.
 
 ## 1.1.6
 - Ajuste para gráfico de barras com porcentagem e ficar no início

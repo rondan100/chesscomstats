@@ -4,6 +4,7 @@ import { processGames }      from './data/process-games.js';
 import { renderResultBar }  from './ui/render-result.js';
 import { renderEcoChart }    from './chart/eco-chart.js';
 import { renderRatingChart } from './chart/rating-chart.js';
+import { renderRatingCards } from './ui/render-rating-cards.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('searchForm');
@@ -32,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
       renderResultBar(stats);
       renderEcoChart(stats.ecoCount);
       renderRatingChart(stats.ratingsInfo, stats.dateCounts);
+      renderRatingCards(games, user);
 
     } catch (err) {
       console.error(err);
