@@ -76,3 +76,19 @@
     max-width: 700px;
     margin: 20px 0;
   }
+
+  .arrow.up {
+    color: green;
+    font-weight: bold;
+  }
+  
+  .arrow.down {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .delta {
+    color: inherit; /* mantém a cor padrão do texto */
+    margin-left: 2px;
+  }
+  

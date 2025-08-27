@@ -7,7 +7,7 @@ export function renderResultBar({ wins, losses, draws, ecoCount }) {
 
   let html = `
     <p>Total de partidas: ${total}</p>
-    
+    <div id="ratingCards"></div>
     <div style="display:flex; height: 30px; border-radius: 5px; overflow: hidden; font-size: 14px; color: white; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.7)">
       <div style="background-color: #4caf50; width: ${winPct}%; display:flex; justify-content:center; align-items:center;">
         ${wins} (${winPct}%)
@@ -33,5 +33,6 @@ export function renderResultBar({ wins, losses, draws, ecoCount }) {
     });
 
   html += '</ul>';
+  
   document.getElementById('result').innerHTML = html;
 }

@@ -1,6 +1,9 @@
 # chesscomstats
-![resultado](versao1.1.7.png)
+![resultado](versao1.1.8.png)
 # Versões
+
+## 1.1.8
+- Ajuste para a diferença ficar colorida e de lado
 
 ## 1.1.7 
 - Adição de Rating atual mostrando a diferença entre o último do range de dias.

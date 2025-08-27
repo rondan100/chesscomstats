@@ -9,8 +9,8 @@ export function renderRatingCards(games, username) {
 
   Object.entries(statsByType).forEach(([type, { current, delta }]) => {
     const arrow = delta >= 0
-      ? `<span class="up">▲ +${delta}</span>`
-      : `<span class="down">▼ ${delta}</span>`;
+      ? `<span class="arrow up"> ▲+${delta}</span>`
+      : `<span class="arrow down"> ▼${delta}</span>`;
 
     const labelMap = {
       rapid: 'Rápidas',
@@ -23,9 +23,7 @@ export function renderRatingCards(games, username) {
     const card = document.createElement('div');
     card.className = `rating-card ${type}`;
     card.innerHTML = `
-      <div class="type">${label}</div>
-      <div class="value">${current}</div>
-      <div class="delta">${arrow}</div>
+      <div class="value">${current}${arrow}</div>
     `;
     container.append(card);
   });
