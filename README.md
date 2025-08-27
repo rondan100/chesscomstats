@@ -2,6 +2,9 @@
 
 # Versões
 
+# 1.1.5
+- Ajuste nas datas para corrigir os numeros de vitórias, empates e derrotas
+
 # 1.1.4
 - Grafico no início
 - Ajuste nos ticks do gráfico de rating

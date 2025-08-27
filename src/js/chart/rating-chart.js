@@ -70,7 +70,7 @@ export function renderRatingChart(ratingsInfo, dateCounts) {
 
               // 3) sempre mostrar o medio tick
               if (index === (total+1)/2) {
-                shownDays.add(dateOnly);
+                if (shownDays.has(dateOnly)) return ''; else shownDays.add(dateOnly);
                 return label;
               }
           

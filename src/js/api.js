@@ -7,10 +7,16 @@ export async function fetchGamesByRange(username, days, tipo) {
   if (!archivesRes.ok) throw new Error('Usuário não encontrado ou sem arquivos.');
   const { archives } = await archivesRes.json();
 
-  // 2) Calcular limite de data
-  const now           = Date.now();
-  const thresholdTime = now - days * 24 * 60 * 60 * 1000;
-  const thresholdDate = new Date(thresholdTime);
+  // 2) Calcular limite de data (início do dia local - N dias atrás)
+  const now = new Date();
+  const thresholdDate = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() - days, // subtrai em dias, não em milissegundos
+    0, 0, 0, 0            // meia-noite local
+  );
+  const thresholdTime = thresholdDate.getTime();
+
   const thresholdMonthStart = new Date(
     thresholdDate.getFullYear(),
     thresholdDate.getMonth(),
